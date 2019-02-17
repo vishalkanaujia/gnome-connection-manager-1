@@ -565,8 +565,8 @@ class Wmain(SimpleGladeApp):
                 elif cmd == _CONSOLE_NEXT:
                     widget.get_parent().get_parent().next_page()
                 elif cmd == _CONSOLE_CLOSE:
-                    wid = widget.get_parent()                    
-                    page = widget.get_parent().get_parent().page_num(wid)                    
+                    wid = widget.get_parent()
+                    page = widget.get_parent().get_parent().page_num(wid)
                     if page != -1:
                         widget.get_parent().get_parent().remove_page(page)
                         wid.destroy()
@@ -1225,13 +1225,13 @@ class Wmain(SimpleGladeApp):
                 tooltip.set_markup(text)
                 return True
         return False
-        
+
     def loadConfig(self):
         global groups
-        
+
         cp= ConfigParser.RawConfigParser(  )
         cp.read( CONFIG_FILE )
-        
+
         #Leer configuracion general
         try:
             conf.WORD_SEPARATORS = cp.get("options", "word-separators")
@@ -1258,8 +1258,8 @@ class Wmain(SimpleGladeApp):
             conf.STARTUP_LOCAL = cp.getboolean("options","startup-local")
         except:
             print "%s: %s" % (_("Entrada invalida en archivo de configuracion"), sys.exc_info()[1])
-        
-        #Leer shorcuts        
+
+        #Leer shorcuts
         scuts = {}
         try:
             scuts[cp.get("shortcuts", "copy")] = _COPY
@@ -1303,7 +1303,7 @@ class Wmain(SimpleGladeApp):
         try:
             scuts[cp.get("shortcuts", "console_close")] = _CONSOLE_CLOSE
         except:
-            scuts["CTRL+W"] = _CONSOLE_CLOSE
+            scuts["CTRL+F11"] = _CONSOLE_CLOSE
         
         try:
             scuts[cp.get("shortcuts", "console_reconnect")] = _CONSOLE_RECONNECT
@@ -1447,15 +1447,15 @@ class Wmain(SimpleGladeApp):
         
         cp= ConfigParser.RawConfigParser( )
         cp.read( CONFIG_FILE + ".tmp" )
-        
+
         cp.add_section("options")
-        cp.set("options", "word-separators", conf.WORD_SEPARATORS)        
+        cp.set("options", "word-separators", conf.WORD_SEPARATORS)
         cp.set("options", "buffer-lines", conf.BUFFER_LINES)
         cp.set("options", "startup-local", conf.STARTUP_LOCAL)
         cp.set("options", "confirm-exit", conf.CONFIRM_ON_EXIT)
         cp.set("options", "font-color", conf.FONT_COLOR)
         cp.set("options", "back-color", conf.BACK_COLOR)
-        cp.set("options", "transparency", conf.TRANSPARENCY)        
+        cp.set("options", "transparency", conf.TRANSPARENCY)
         cp.set("options", "paste-right-click", conf.PASTE_ON_RIGHT_CLICK)
         cp.set("options", "confirm-close-tab", conf.CONFIRM_ON_CLOSE_TAB)
         cp.set("options", "check-updates", conf.CHECK_UPDATES)
@@ -1466,7 +1466,7 @@ class Wmain(SimpleGladeApp):
         cp.set("options", "version", app_fileversion)
         cp.set("options", "auto-close-tab", conf.AUTO_CLOSE_TAB)
 
-        collapsed_folders = ','.join(self.get_collapsed_nodes())         
+        collapsed_folders = ','.join(self.get_collapsed_nodes())
         cp.add_section("window")
         cp.set("window", "collapsed-folders", collapsed_folders)
         cp.set("window", "left-panel-width", self.hpMain.get_position())
@@ -1474,7 +1474,7 @@ class Wmain(SimpleGladeApp):
         cp.set("window", "window-height", conf.WINDOW_HEIGHT)
         cp.set("window", "show-panel", conf.SHOW_PANEL)
         cp.set("window", "show-toolbar", conf.SHOW_TOOLBAR)
-        
+
         i=1
         for grupo in groups:
             for host in groups[grupo]:
@@ -1482,26 +1482,26 @@ class Wmain(SimpleGladeApp):
                 cp.add_section(section)
                 HostUtils.save_host_to_ini(cp, section, host)
                 i+=1
-        
+
         cp.add_section("shortcuts")
         i=1
-        for s in shortcuts:            
+        for s in shortcuts:
             if type(shortcuts[s]) == list:
                 cp.set("shortcuts", shortcuts[s][0], s)
             else:
                 cp.set("shortcuts", "shortcut%d" % (i), s)
                 cp.set("shortcuts", "command%d" % (i), shortcuts[s].replace('\n','\\n'))
                 i=i+1
-                
+
         f = open(CONFIG_FILE + ".tmp", "w")
         cp.write(f)
         f.close()
         os.rename(CONFIG_FILE + ".tmp", CONFIG_FILE)
-        
+
     def on_tab_focus(self, widget, *args): 
         if isinstance(widget, vte.Terminal):
             self.current = widget
-        
+
     def split_notebook(self, direction):        
         csp = self.current.get_parent() if self.current!=None else None
         cnb = csp.get_parent() if csp!=None else None
@@ -1521,16 +1521,16 @@ class Wmain(SimpleGladeApp):
 
             if direction==HSPLIT:
                 cnb.set_size_request(cnb.allocation.width/2, cnb.allocation.height)
-            else:                
+            else:
                 cnb.set_size_request(cnb.allocation.width, cnb.allocation.height/2)
             #cnb.set_size_request(cnb.allocation.width/2, cnb.allocation.height/2)
-            
+
             cp.remove(cnb)
             cp.add(hp)
-            hp.add1(cnb)                        
-            
+            hp.add1(cnb)
+
             text = cnb.get_tab_label(csp).get_text()
-            
+
             csp.reparent(nb)
             csp = nb.get_nth_page(0)
                         
